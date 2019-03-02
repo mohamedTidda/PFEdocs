@@ -1,0 +1,360 @@
+
+/* ===========================start Main Rulez =========================================*/
+body {
+	background-color: #F3F3F3;
+	font-size: 16px;
+}
+a:hover{
+  text-decoration: none;
+}
+.asterisk {
+	 font-size: 30px;
+    position: absolute;
+    right: 30px;
+    top: 8px;
+    color: #D20707;
+}
+.star{
+    right: 9px;
+    top: 37px;
+}
+.show-pass {
+  position: absolute;
+  top: 6px;
+  right: -30px;
+}
+
+.nice-message {
+	padding: 10px;
+	background-color: #FFF;
+	margin: 10px 0;
+	border-left: 5px solid #080;
+}
+/* ===========================End Main Rulez =========================================*/
+/*===========================start Login form========================================*/
+.login {
+	width: 300px;
+	margin: 100px auto;
+}
+
+.login h4 {
+	color: #888;
+}
+
+.login input {
+	margin-bottom: 10px;
+}
+
+.login .form-control {
+	background-color: #EAEAEA;
+}
+
+.login .btn {
+	background-color: #008dde;
+}
+/*===========================end Login form==========================================*/
+
+/*============================ Start Bootstrap Edits================================= */
+
+.navbar {
+  border-radius: 0;
+  margin-bottom: 0;
+}
+.navbar-inverse {
+    border-color: #0e77e6;
+}
+.nav > li > a,
+.navbar-brand {
+  padding: 15px 12px;
+}
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-nav>li>a{
+color: #fff;
+}
+.navbar-brand {
+  font-size: 1em;
+}
+
+.navbar-inverse .navbar-nav > .open>a,
+.navbar-inverse .navbar-nav > .open>a:focus,
+.navbar-inverse .navbar-nav > .open>a:hover,
+.dropdown-menu {
+    background-color: #3498db;
+}
+.navbar-inverse .navbar-toggle:hover,
+.navbar-inverse .navbar-toggle:focus{
+  background-color: #4896e8;
+}
+.navbar-inverse .navbar-toggle{
+  border-color:  #0b75e6;
+}
+.navbar-inverse .navbar-collapse{
+  border-color:#5846e8;
+}
+.dropdown-menu {
+  min-width: 180px;
+  padding: 0;
+  font-size: 1em;
+  border: none;
+  border-radius: 0;
+}
+
+.dropdown-menu > li > a {
+  color: #FFF;
+  padding: 10px 15px;
+}
+
+.dropdown-menu > li > a:focus,
+.dropdown-menu > li > a:hover {
+    color: #FFF;
+    background-color: #8e44ad;
+}
+
+.form-control {
+  position: relative;
+}
+.position-r{
+  position: relative;
+}
+.search-box{
+    position: absolute;
+    top: 10px;
+    right: 160px;
+}
+@media (min-width: 768px){
+ .navbar-right{
+   margin-right: -35px !important;
+ } 
+}
+@media (max-width: 991px){
+  .search-box{
+    right: 43px;
+  }
+}
+/*===============================End Bootstrap Edits=======================================================*/
+/*==============================start dashboard page ===================================================*/
+.home-stats .stat{
+   padding: 20px;
+   font-size: 15px;
+   color: #fff;
+   border-radius: 10px;
+}
+.home-stats .stat a{
+  color: #fff;
+}
+.home-stats .stat span{
+  display: block;
+  font-size: 60px;
+}
+.home-stats .st-doctor{
+background-color: #4b7bec;
+}
+.home-stats .st-pharmacy{
+background-color: #a55eea;
+}
+.home-stats .st-patient{
+background-color: #2bcbba;
+}
+.home-stats .st-medication{
+background-color: #4b6584;
+}
+.latest{
+  margin-top: 30px;
+}
+/*==============================end dashboard page ===================================================*/
+/*===============================Start doctors page =======================================================*/
+h1 {
+  font-size: 55px;
+  margin: 40px 0;
+  font-weight: bold;
+  color: #368eec ;/*#666;*/
+}
+h2{
+  font-size: 40px;
+  font-weight: bold;
+  color:#368eec ; /*#666;*/
+}
+label{
+  color: #666;
+}
+.main-table {
+  -webkit-box-shadow: 0 3px 10px #CCC;
+  -moz-box-shadow: 0 3px 10px #CCC;
+  box-shadow: 0 3px 10px #CCC;
+} 
+
+.main-table td {
+  background-color: #FFF;
+  vertical-align: middle !important;
+}
+.main-table tr:first-child td{
+  background-color: #368eec;
+  color: #FFF;
+}
+.main-table .btn{
+  padding: 3px 10px;
+}
+/*===============================end doctors page =======================================================*/
+/*===============================Start login usrs ======================================================*/
+.main-background{
+  background-image: url('../image/3.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-background-size:cover;
+  -moz-background-size:cover;
+  background-size:cover;
+  min-height: 610px;
+  position: relative;
+}
+.main-background .overlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,.76);
+}
+.main-background .descrpition{
+   margin: 100px auto;
+}
+.main-background .descrpition h2{
+  text-align: left;
+}
+.main-background .descrpition p{
+      color: #fff;
+    font-size: 20px;
+    line-height: 1.6;
+    text-align: left;
+}
+.login-form h3,
+.login-form label{
+  color: #fff !important;
+}
+.login-form h3{
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.control{
+  position: relative;
+}
+.login-form .form-control{
+  background-color: #fff !important;
+}
+.login-form label{
+  color: #fff !important;
+  font-size: 20px;
+}
+/*===============================End login usrs ======================================================*/
+/*=============================Start profile page =======================================*/
+.information{
+  margin-top: 20px;
+}
+.information ul,
+.prescribe-form .m-resultRearch ul{
+  padding: 0;
+  margin:0;
+}
+.information ul li{
+  padding: 10px;
+}
+.information ul li:nth-child(odd),
+.prescribe-form .m-resultRearch ul .medice-n:nth-child(odd){
+  background-color: #eee;
+}
+.information ul li span{
+  display: inline-block;
+  width: 120px;
+}
+.prescribe-form{
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .prescribe-form .m-resultRearch{
+    background-color: #fff; 
+  }
+  .prescribe-form .m-resultRearch ul{
+    margin:15px;
+  }
+  .prescribe-form .m-resultRearch ul .medice-n{
+  padding: 5px;
+  cursor: pointer;
+}
+/*=============================End profile page =======================================*/
+/*==============start prescribe page ===================================================*/
+.title-prescribe{
+  margin:30px 0 !important;
+}
+.plus-margin{
+  margin-bottom: 20px;
+}
+.prescription{
+  background-color: #fff;
+  min-height: 400px;
+  border-radius: 10px;
+  padding: 35px;
+  padding-top: 12px;
+  border: 1px solid #aaa;
+}
+.prescription .row .doctor-info,
+.prescription .row .patient-info {
+padding: 5px;
+}
+.prescription .row .doctor-info span,
+.prescription .row .patient-info span{
+    display: block;
+    margin: 5px;
+    font-size: 20px;
+    font-weight: 700;
+}
+.prescription .medicine h4{
+  font-weight: bold;
+}
+.prescription .medicine ul{
+  margin-top: 30px;
+}
+.med-item{
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+.med-item .r-f-t{
+  display: block;
+    margin-left: 18px;
+}
+.save-prescribtion{
+  margin-bottom: 20px;
+}
+/*==============end prescribe page ===================================================*/
+/*===============================Start my framework=======================================================*/
+
+.bg-blue{
+  background-color: #368eec !important;
+}
+.bg-blue-h:hover{
+  background-color:#0e72dc !important;
+}
+.bg-blue-f:focus{
+  background-color:#0e72dc !important;
+}
+.visible{
+  display: block !important;
+}
+.float-r{
+  float: right !important;
+}
+.position_relative{
+  position: relative;
+}
+.btn_add{
+    position: absolute;
+    top: 9px;
+    right: 21px;
+}
+@media (max-width: 751px){
+  .float-r{
+    float: none !important;
+  } 
+}
+/*===============================End my framework=======================================================*/
+
+
+
