@@ -129,7 +129,9 @@ if($do=='manage'){
         if($count > 0){
           $result.='<p>search result</p>';
           foreach ($rows as $row) {
-            $result.='<div >'.$row['p_id'].'</div>';
+            $result.='<div class="iteam-search" ><a href="profile.php?p_id='.$row['p_id'].'">'.
+            $row['p_name']
+            .'</a></div>';
           }
               echo $result;
         }else{
@@ -141,7 +143,7 @@ if($do=='manage'){
 }elseif($do =='search-medicine'){
       if(isset($_POST['txt'])){
        $name=$_POST['txt'];
-       $result='';
+         $result='';
          $stmt=$con->prepare("SELECT * FROM PFE_DB.medicines WHERE name LIKE '%".$name."%' ");
          $stmt->execute();
          $count=$stmt->rowCount();
@@ -163,31 +165,79 @@ if($do=='manage'){
       $m_name=$_POST['m-name'];
       $dose=$_POST['dose'];
       $repeated=$_POST['repeated'];
-      $box=$_POST['box'];
+      $boxs=$_POST['box'];
       $form=$_POST['form'];
-      $time=$_POST['time'];
+      $time_use=$_POST['time'];
       $p_id=$_POST['p_id'];
       $d_id=$_POST['d_id'];
             //insert the information in DB
         $stmt=$con->prepare('INSERT INTO PFE_DB.mdicines_described(name, dose, repeated, boxs , form, time_use,p_id,
           d_id, prescribe_date, already_added) VALUES (:name,:dose, :repeated, :boxs, :form, :time_use, :p_id, :d_id, now(),0)');
-        $stmt->execute(array(
+            $stmt->execute(array(
            'name'     => $m_name,
            'dose'     => $dose,
            'repeated' => $repeated,
-           'boxs'     =>$box,
+           'boxs'     =>$boxs,
            'form'     =>$form,
-           'time_use' =>$time,
+           'time_use' =>$time_use,
            'p_id'     =>$p_id,
            'd_id'     =>$d_id
           ));
         if($stmt->rowCount()>0){
-          echo 'mdicines_described';
+              $stmt1=$con->prepare("SELECT * FROM PFE_DB.mdicines_described WHERE p_id=? AND d_id=? AND already_added=0 ORDER BY id DESC LIMIT 1");
+              $stmt1->execute(array($p_id, $d_id));
+              $row=$stmt1->fetch(); 
+              if($stmt1->rowCount()>0){
+                 echo $row['id'].'-'.$row['name'].'-'.$row['dose'].'-'.
+                      $row['repeated'].'-'.$row['boxs'].'-'.$row['form'].'-'.$row['time_use'];
+              }else{
+                echo 'not_result_found';
+              }
         }else{
           echo 'not_mdicines_described';
         }
     }
-}elseif($do=='save-prescribtion') {
+}elseif ($do =='get-medicine-id') {
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $m_name=$_POST['m-name'];
+            $dose=$_POST['dose'];
+            $repeated=$_POST['repeated'];
+            $boxs=$_POST['box'];
+            $form=$_POST['form'];
+            $time_use=$_POST['time'];
+            $p_id=$_POST['p_id'];
+            $d_id=$_POST['d_id'];
+            $date=date('Y-m-d');
+
+            $stmt1=$con->prepare("SELECT id FROM PFE_DB.mdicines_described WHERE name=? AND dose=? AND  repeated=? AND 
+                     boxs=? AND form=? AND  time_use=? AND p_id=? AND  d_id=? AND  prescribe_date=? 
+                     ORDER BY id DESC LIMIT 1");
+            $stmt1->execute(array($m_name, $dose, $repeated, $boxs, $form, $time_use, $p_id, $d_id, $date));
+            $row=$stmt1->fetch(); 
+             if($stmt1->rowCount() > 0){
+                echo $row['id'];
+             }else{
+               echo 'error';
+             }
+
+      }
+}elseif ($do=='get-medicine-info') {
+   if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    $m_id=$_POST['m_id'];
+     $result='';
+     $stmt=$con->prepare("SELECT * FROM PFE_DB.mdicines_described WHERE id=?");
+     $stmt->execute(array($m_id));
+     $row=$stmt->fetch(); 
+     if($stmt->rowCount() >0){
+       echo $row['id'].'-'.$row['name'].'-'.$row['dose'].'-'.
+            $row['repeated'].'-'.$row['boxs'].'-'.$row['form'].'-'.$row['time_use'];
+       
+     }else{
+      echo 'bad';
+     }
+   }
+ 
+}elseif($do=='save-prescription') {
     $p_id = $_POST['Pid'];
     $stmt=$con->prepare('INSERT INTO PFE_DB.prescription(p_id, d_id, add_time) VALUES (:p_id,:d_id, now())');
      $stmt->execute(array(
@@ -204,17 +254,38 @@ if($do=='manage'){
                  AND mdicines_described.p_id=prescription.p_id AND mdicines_described.d_id=prescription.d_id');
                 $stmt2->execute(array($row['id']));
                 if($stmt2->rowCount()>0){
-                  echo 'prescribtion saved';
+                  echo 'prescribtion_saved';
                 }else{
-                   echo 'prescribtion_not_saved';
+                   echo 'prescribtion_not_saved1';
                  }
            } else{
-              echo 'prescribtion_not_saved';
+              echo 'prescribtion_not_saved2';
            }      
    }else{
-    echo 'prescribtion_not_saved';
+    echo 'prescribtion_not_saved3';
    }
 
+}elseif ($do=='change-medicine') {
+  if($_SERVER['REQUEST_METHOD'] == 'POST'){
+     $id        =$_POST['ch-id'];
+     $name      =$_POST['ch-m-name'];
+     $dose      =$_POST['ch-dose'];
+     $repeated  =$_POST['ch-repeated'];
+     $box       =$_POST['ch-box'];
+     $form      =$_POST['ch-form'];
+     $time      =$_POST['ch-time'];
+        //Update The Database With This Info
+        $stmt = $con->prepare("UPDATE PFE_DB.mdicines_described SET
+                                name =?, dose=?, repeated = ?, boxs = ?, form = ? , time_use=?
+                                WHERE id = ?");
+        $stmt->execute(array($name, $dose, $repeated, $box , $form, $time, $id));
+        if($stmt->rowCount()>0){
+          echo 'medicine_updated'.'-'.$id.'-'.$name.'-'.$dose.'-'.$repeated.'-'.$box.'-'.$form.'-'.$time;
+        }else{
+           echo 'not_medicine_updated';
+        }
+  }
+  
 }elseif ($do=='add-patient') {
   if($_SERVER['REQUEST_METHOD'] == 'POST'){
       $d_id       =$_POST['d_id'];
@@ -283,5 +354,22 @@ if($do=='manage'){
                       }
                  }
        
+  }
+}elseif ($do =='addPatientHistory') {
+  if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    $p_id        = $_POST['p_id'];
+    $diseases    = $_POST['chronicDiseases'] ;
+    $medications = $_POST['importantMedications'] ;
+        $stmt=$con->prepare('INSERT INTO PFE_DB.patienthistory(p_id, d_id, chronicDiseases, importantMedications) VALUES (:p_id,:d_id, :diseases, :medications)');
+        $stmt->execute(array(
+        'p_id'         => $p_id,
+        'd_id'         => $_SESSION['id'],
+        'diseases'    =>$diseases,
+        'medications' =>$medications ));
+        if($stmt->rowCount()>0){
+          echo 'history_inserted';
+        }else{
+          echo 'not_history_inserted';
+        }
   }
 }

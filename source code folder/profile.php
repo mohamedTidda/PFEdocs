@@ -12,7 +12,20 @@
         $row = $stmt->fetch();
         ?>
     <h1 class="text-center">profile</h1>
-     <div class="information block">
+    <div class="container">
+      <?php 
+        //chack iff there is relishin between doctor and patient 
+         $stmt1 = $con->prepare("SELECT * FROM PFE_DB.patientofdoctor WHERE p_id = ? AND  D_id = ? LIMIT 1");
+         $stmt1->execute(array($p_id, $_SESSION['id']));
+         $r = $stmt1->fetch();
+        if($stmt1->rowCount()>0){ ?>
+           <button class="btn btn-danger pull-right confirm3" data-id="<?php echo $r["pOd_id"]; ?>">Remove</button>
+        <?php }else{ ?>
+             <button class="btn btn-primary bg-blue bg-blue-h pull-right add-">add to your patients</button>
+        <?php }
+      ?>
+    </div>
+           <div class="information block">
         <div class="container">
             <div class="panel panel-primary">
                 <div class="panel-heading text-center bg-blue">Information</div>
@@ -39,33 +52,80 @@
             </div>
         </div>
      </div>
+     <div>
+       <div class="container">
+           <div class="panel panel-primary">
+              <div class="panel-heading text-center bg-blue">Add history</div>
+              <div class="panel-body">
+                <div class="alert alert-success history-success hidden">Successfully added</div>
+                <form class="historyForm form-horizontal" action="" method="POST">
+                  <input type="hidden" name="p_id" value="<?php echo  $p_id ;?>">
+                  <input type="hidden" name="d_id" value="<?php echo $_SESSION['id'] ; ?>">
+                    <!-- Start Chronic diseases Field -->
+                    <div class="form-group form-group-lg">
+                        <label class="col-sm-2 col-md-3 control-label ">Chronic diseases</label>
+                        <div class="col-sm-10 col-md-8">
+                            <textarea type="text" name="chronicDiseases" class="chronicDiseases form-control"  autocomplete="off" placeholder=" Separated with (-) expmle: diseases1 - diseases2 - ..." /></textarea>
+                        </div>
+                    </div>
+                    <!-- End Chronic diseases Field -->
+                    <!-- Start Important medications Field -->
+                    <div class="form-group form-group-lg">
+                        <label class="col-sm-2 col-md-3 control-label ">Important medications</label>
+                        <div class="col-sm-10 col-md-8">
+                            <textarea type="text" name="importantMedications" class="importantMedications form-control"  autocomplete="off" placeholder=" Separated with (-) expmle: medication1 - medication2 - ..." /></textarea>
+                        </div>
+                    </div>
+                    <!-- End Important medications Field -->
+                    <!-- Start Submit Field -->
+                    <div class="form-group form-group-lg">
+                        <div class="col-sm-offset-3 col-sm-10">
+                            <button type="submit" class="btn btn-primary btn-lg bg-blue bg-blue-h historyFormBtn" >Save</button>
+                        </div>
+                    </div>
+                    <!-- End Submit Field -->
+                </form>
+              </div>
+           </div>
+       </div>
+     </div>
      <div class="describe block">
         <div class="container">
             <div class="panel panel-primary">
                 <div class="panel-heading text-center bg-blue">All prescriptions</div>
                 <div class="panel-body">
-                    <?php
-                          //get the information from DB about patient
-                           $stmt1 = $con->prepare("SELECT * FROM PFE_DB.prescription WHERE p_id = ? ");
-                           $stmt1->execute(array($p_id));
-                          $rows1=$stmt1->fetchAll();
+                   <?php
+                      //get the information from DB about patient
+                       $stmt1 = $con->prepare("SELECT * FROM PFE_DB.prescription WHERE p_id = ? ");
+                       $stmt1->execute(array($p_id));
+                       $rows1=$stmt1->fetchAll();
                           if($stmt1->rowCount() >0){
-                               foreach ($rows1 as $row1) {
-                                  //get the information from DB about patient
-                                $stmt = $con->prepare("SELECT * FROM PFE_DB.mdicines_described WHERE prescription_id = ? ");
-                                $stmt->execute(array($row1['id']));
-                                $rows=$stmt->fetchAll();
-                                  if($stmt->rowCount() > 0){
-                                     foreach ($rows as $row) {
-                                       echo $row['name'].'<br>';
-                                     }
-                                  }
-                               }
+                                echo '<div class="row">';
+                                    foreach ($rows1 as $row1) { 
+                                       $stmt = $con->prepare("SELECT * FROM PFE_DB.doctors INNER JOIN PFE_DB.patients 
+                                        WHERE patients.p_id = ? AND doctors.D_id=? ");
+                                        $stmt->execute(array($p_id, $row1['d_id'] ));
+                                        $rows=$stmt->fetchAll();
+                                             if($stmt->rowCount()>0){
+                                                  foreach ($rows as $row) {?>
+                                                        <div class="col-sm-6 col-md-3 ">
+                                                             <div class="description-list">
+                                                               <h4 class="text-center"><?php echo $row['description'];?></h4>
+                                                               <!-- doctor description -->
+                                                                <span><?php echo 'Dr '.$row['D_name'];?></span>
+                                                                 <span><?php echo $row['description'];?></span>
+                                                             </div> 
+                                                        </div>
+                                                    <?php
+                                                  }
+                                             }
+                                   }
+                              echo '</div>';
                           }else{
                             echo 'there is no prescription ';
                           }
-                          
                     ?>
+                  
                 </div>
             </div>
         </div>

@@ -9,7 +9,7 @@
     	     $stmt = $con->prepare("SELECT * FROM PFE_DB.patients INNER JOIN PFE_DB.patientofdoctor
     	      WHERE patients.p_id=patientofdoctor.p_id AND patientofdoctor.D_id=? 
               ORDER BY patientofdoctor.pOd_id DESC ");
-		      $stmt->execute(array($_SESSION['id']));
+		         $stmt->execute(array($_SESSION['id']));
               $rows = $stmt->fetchAll();
         ?>
               <h1 class="text-center">My patients</h1>
@@ -37,9 +37,9 @@
                                      <a data-id="'.$row["pOd_id"].'" class="btn btn-danger confirm2">
                                          <i class="fa fa-close"></i> Delete</a>
                                      <a href="profile.php?p_id='.$row["p_id"].'" class="btn btn-info"/>
-                                         <i class="fa fa-question-circle"></i> Move info</a>
+                                         <i class="fa fa-question-circle"></i> More info</a>
                                      <a href="?do=prescribe&p_id='.$row["p_id"].'" class="btn btn-info"/>
-                                         <i class="fa fa-pen-square"></i> Write prescription</a>
+                                         <i class="fa fa-edit"></i> Prescribe</a>
                                    </td';
                     echo '</tr>';
 
@@ -189,7 +189,7 @@
         // Select the information of the patient
         $stmt = $con->prepare("SELECT * FROM PFE_DB.patients WHERE p_id = ? LIMIT 1");
         $stmt->execute(array($p_id));
-        $row = $stmt->fetch(); 
+        $row = $stmt->fetch();
         //select the information of the doctor
         $stmt = $con->prepare("SELECT * FROM PFE_DB.doctors WHERE D_id = ? LIMIT 1");
         $stmt->execute(array($_SESSION['id']));
@@ -197,6 +197,7 @@
          ?>
        <div class="container">
            <h1 class="title-prescribe text-center">prescribe page</h1>
+              <div class="alert alert-success hidden prescribe-save">Prescription saved</div>
            <div class="row plus-margin"> 
                 <div class="col-sm-6">
                               <div class="alert alert-danger medicine-nameError hidden"></div>
@@ -205,40 +206,41 @@
                               <div class="alert alert-danger boxError hidden"></div>
                               <div class="alert alert-danger formError hidden"></div>
                               <div class="alert alert-danger timeError hidden"></div>
+                              <div class="alert alert-danger medicine-name-result hidden"> </div>
                     <form class="prescribe-form" action="" method="POST">
                       <input type="hidden" name="p_id" value="<?php echo $p_id ;?>">
                       <input type="hidden" name="d_id" value="<?php echo $_SESSION['id'] ;?>">
                         <!-- start name field -->
-                        <div class="form-group ">
+                        <div class="form-group control">
                         <label class="control-label ">medicine name</label>
-                        <input class="form-control medicine-name" data-id="req" type="text" name="m-name" placeholder="Medicine name" autocomplete="off" />
+                        <input class="form-control medicine-name" type="text" name="m-name" placeholder="Medicine name" autocomplete="off" required="required" data-id="start1"/>
                         <div class="m-resultRearch"></div>
                         </div>
                         <!-- end name field -->
                         <!-- start dose field -->
-                        <div class="form-group ">
+                        <div class="form-group control ">
                         <label class="control-label ">dose</label>
-                        <input class="form-control dose" data-id="req" type="number" name="dose" placeholder="Dose"  autocomplete="new-password" step="0.5" min="0"/>
+                        <input class="form-control dose"  type="number" name="dose" placeholder="Dose"  autocomplete="new-password" step="0.5" min="0" required="required" data-id="start1"/>
                        </div>
                        <!-- end dose field -->
                           <!-- start Repeated field -->
-                        <div class="form-group ">
+                        <div class="form-group control">
                         <label class="control-label ">Repeated</label>
-                        <input class="form-control repeated" data-id="req" type="number" name="repeated" placeholder="Repeated" 
-                        min="0"/>
+                        <input class="form-control repeated" type="number" name="repeated" placeholder="Repeated" 
+                        min="0" required="required" data-id="start1"/>
                        </div>
                        <!-- end Repeated field -->
                           <!-- start box field -->
-                        <div class="form-group ">
+                        <div class="form-group control">
                         <label class="control-label ">Box</label>
-                        <input class="form-control box" data-id="req" type="number" name="box" placeholder="Box" 
-                        min="0"/>
+                        <input class="form-control box"  type="number" name="box" placeholder="Box" 
+                        min="0" required="required" data-id="start1"/>
                        </div>
                        <!-- end box field -->
                        <!-- start form field -->
-                        <div class=" form-group">
+                        <div class=" form-group control" >
                         <label class="control-label ">Form</label>
-                            <select name="form" class="form form-control form">
+                            <select name="form" class="form form-control form" required="required" data-id="start1">
                             <option value="0">choose the form of medicine</option>
                             <option value="Troches">Troches</option>
                             <option value="Injection">Injection</option>
@@ -246,17 +248,19 @@
                             <option value="Topical Ointment">Topical Ointment</option>
                             <option value="Add-Water Powder">Add-Water Powder</option>
                         </select>
+                        <span class="asterisk">*</span>
                        </div>
                        <!-- end form field -->
                        <!-- start time field -->
-                        <div class="form-group ">
+                        <div class="form-group control ">
                         <label class="control-label ">Time</label>
-                            <select name="time" class="form-control time">
+                            <select name="time" class="form-control time" required="required" data-id="start1">
                             <option value="0">choose time of use</option>
                             <option value="morning">morning</option>
                             <option value="before meal">before meal</option>
                             <option value="after meal">after meal</option>
                         </select>
+                        <span class="asterisk">*</span>
                        </div>
                         <!-- end time field -->
                         <a href="#" class="btn btn-primary bg-blue-h bg-blue add-medicine"  >
@@ -265,7 +269,7 @@
                         <!-- <input type="submit" name="sub" value="save"> -->
                     </form>
                 </div>
-             <button data-id="<?php echo $row['p_id'] ?>" class="pull-right btn btn-primary bg-blue-h bg-blue save-prescribtion">save prescribtion</button>
+             <button data-id="<?php echo $row['p_id'] ;?>" class="pull-right btn btn-primary bg-blue-h bg-blue save-prescribtion">save prescribtion</button>
                 <div class="col-sm-6 prescription">
                     <div class="row">
                       <h4 class="text-center"><?php echo $row1['description'];?></h4>
@@ -285,12 +289,96 @@
 
                     <div class="medicine">
                       <h4 class="text-center">PRESCRIPTION</h4>
-                      <ul class="list-unstyled medicine-list ">
+                       <div class="medicine-btn"></div>
+                      <ul class="list-unstyled medicine-list "> 
+                        
                       </ul>
                     </div>
                 </div>
            </div>
        </div>
+<!-- ========= start model edit prescription=============== -->
+       <div class="modal modal-medicine" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                </button>
+             <h2 class="text-center title">Add new doctor</h2>
+             </div>
+                 <div class="modal-body">
+                              <div class="alert alert-success ch-medicine-success hidden"></div>
+                              <div class="alert alert-danger ch-medicine-nameError hidden"></div>
+                              <div class="alert alert-danger ch-doseError hidden"></div>
+                              <div class="alert alert-danger ch-repeatedError hidden"></div>
+                              <div class="alert alert-danger ch-boxError hidden"></div>
+                              <div class="alert alert-danger ch-formError hidden"></div>
+                              <div class="alert alert-danger ch-timeError hidden"></div>
+                    <form class="ch-medicine-form" action="" method="POST">
+                      <input class="ch-id" type="hidden" name="ch-id" >
+                        <!-- start name field -->
+                        <div class="form-group control">
+                        <label class="control-label ">medicine name</label>
+                        <input class="form-control ch-m-name" type="text" name="ch-m-name" placeholder="Medicine name" autocomplete="off" required="required" data-id="start1"/>
+                        <div class="m-resultRearch"></div>
+                        </div>
+                        <!-- end name field -->
+                        <!-- start dose field -->
+                        <div class="form-group control ">
+                        <label class="control-label ">dose</label>
+                        <input class="form-control ch-dose"  type="number" name="ch-dose" placeholder="Dose"  autocomplete="new-password" step="0.5" min="0" required="required" data-id="start1"/>
+                       </div>
+                       <!-- end dose field -->
+                          <!-- start Repeated field -->
+                        <div class="form-group control">
+                        <label class="control-label ">Repeated</label>
+                        <input class="form-control ch-repeated" type="number" name="ch-repeated" placeholder="Repeated" 
+                        min="0" required="required" data-id="start1"/>
+                       </div>
+                       <!-- end Repeated field -->
+                          <!-- start box field -->
+                        <div class="form-group control">
+                        <label class="control-label ">Box</label>
+                        <input class="form-control ch-box"  type="number" name="ch-box" placeholder="Box" 
+                        min="0" required="required" data-id="start1"/>
+                       </div>
+                       <!-- end box field -->
+                       <!-- start form field -->
+                        <div class=" form-group control" >
+                        <label class="control-label ">Form</label>
+                            <select name="ch-form" class="form form-control ch-form" required="required" data-id="start1">
+                            <option value="0">choose the form of medicine</option>
+                            <option value="Troches">Troches</option>
+                            <option value="Injection">Injection</option>
+                            <option value="Liquid"> Liquid</option>
+                            <option value="Topical Ointment">Topical Ointment</option>
+                            <option value="Add-Water Powder">Add-Water Powder</option>
+                        </select>
+                        <span class="asterisk">*</span>
+                       </div>
+                       <!-- end form field -->
+                       <!-- start time field -->
+                        <div class="form-group control ">
+                        <label class="control-label ">Time</label>
+                            <select name="ch-time" class="form-control ch-time" required="required" data-id="start1">
+                            <option value="0">Choose time of use</option>
+                            <option value="morning">morning</option>
+                            <option value="before meal">before meal</option>
+                            <option value="after meal">after meal</option>
+                        </select>
+                        <span class="asterisk">*</span>
+                       </div>
+                        <!-- end time field -->
+                        <a href="#" class="btn btn-primary bg-blue-h bg-blue save-ch-medicine"  >
+                                   <i class="fa fa-plus"></i> Save
+                        </a>
+                    </form>
+      </div>
+    </div>
+  </div>
+</div> 
+     <!-- ========= end model to add new doctor =============== -->
 <?php }
 
 include $tpl . 'footer_end.php';
